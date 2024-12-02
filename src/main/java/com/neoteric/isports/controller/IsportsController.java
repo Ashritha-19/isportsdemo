@@ -33,7 +33,6 @@ public class IsportsController {
 
     }
 
-
     @PostMapping("/profile")
     public ProfileDetails createProfile(@RequestBody ProfileDetailsDTO profileDetailsDTO){
         logger.info("Creating profile for sport {}",profileDetailsDTO.getSport());
