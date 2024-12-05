@@ -1,9 +1,12 @@
 package com.neoteric.isports.service;
 
-import com.neoteric.isports.dto.ProfileDetailsDTO;
 import com.neoteric.isports.entity.ProfileDetails;
+import com.neoteric.isports.enums.ErrorMessage;
+import com.neoteric.isports.dto.Status;
 import com.neoteric.isports.mappers.ProfileMapper;
 import com.neoteric.isports.repository.ProfileDetailsRepository;
+import com.neoteric.isports.requests.ProfileDetailsRequest;
+import com.neoteric.isports.response.ProfileDetailsResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,19 +24,22 @@ public class ProfileDetailsService {
     @Autowired
     private ProfileMapper profileMapper;
 
-    public ProfileDetails saveProfile(ProfileDetailsDTO profileDetailsDTO){
-        logger.info("Saving profile for Sport: {}", profileDetailsDTO.getSport());
-       ProfileDetails profileDetails = this.profileMapper.toEntity(profileDetailsDTO);
+    public ProfileDetailsResponse saveProfile(ProfileDetailsRequest profileDetailsRequest){
 
+       ProfileDetails profileDetails = this.profileMapper.toEntity(profileDetailsRequest.profileDetailsDTO);
 
+        profileDetailsRepository.save(profileDetails);
 
-      /* AccountDetails account = accountDetailsRepository.findById(profileDetailsDTO.getAccountId())
-                .orElseThrow(() -> new RuntimeException("Account Not Found"));
+        ProfileDetailsResponse profileDetailsResponse = new ProfileDetailsResponse();
+        profileDetailsResponse.profileDetailsDTO = profileDetailsRequest.profileDetailsDTO;
 
-        profile.setAccountDetailsEntity(account);  */
+        Status status = new Status();
+        status.setMessage(ErrorMessage.VALID_PROFILE.getMessage());
+        status.setCode(ErrorMessage.VALID_PROFILE.getCode());
 
-        return profileDetailsRepository.save(profileDetails);
+        profileDetailsResponse.setStatus(status);
 
+        return profileDetailsResponse;
 
     }
 }

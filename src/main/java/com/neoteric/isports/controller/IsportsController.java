@@ -1,11 +1,14 @@
 package com.neoteric.isports.controller;
 
-import com.neoteric.isports.dto.AccountDetailsDTO;
-import com.neoteric.isports.dto.ProfileDetailsDTO;
-import com.neoteric.isports.entity.AccountDetails;
-import com.neoteric.isports.entity.ProfileDetails;
-import com.neoteric.isports.service.AccountDetailsService;
-import com.neoteric.isports.service.ProfileDetailsService;
+import com.neoteric.isports.requests.AccountDetailsRequest;
+import com.neoteric.isports.requests.PaymentDetailsRequest;
+import com.neoteric.isports.requests.PrivacySettingsRequest;
+import com.neoteric.isports.requests.ProfileDetailsRequest;
+import com.neoteric.isports.response.AccountDetailsResponse;
+import com.neoteric.isports.response.PaymentDetailsResponse;
+import com.neoteric.isports.response.PrivacySettingsResponse;
+import com.neoteric.isports.response.ProfileDetailsResponse;
+import com.neoteric.isports.service.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,17 +29,34 @@ public class IsportsController {
     @Autowired
     private ProfileDetailsService profileDetailsService;
 
+    @Autowired
+    private PaymentDetailsService paymentDetailsService;
+
+    @Autowired
+    private PrivacySettingsService privacySettingsService;
+
+
     @PostMapping("/account")
-    public AccountDetails createAccount(@RequestBody AccountDetailsDTO accountDetailsDTO){
-        logger.info("Creating account for: {}", accountDetailsDTO.getMobileNumber());
-        return accountDetailsService.saveAccount(accountDetailsDTO);
+    public AccountDetailsResponse createAccount(@RequestBody AccountDetailsRequest accountDetailsRequest){
+        return accountDetailsService.saveAccount(accountDetailsRequest);
 
     }
 
     @PostMapping("/profile")
-    public ProfileDetails createProfile(@RequestBody ProfileDetailsDTO profileDetailsDTO){
-        logger.info("Creating profile for sport {}",profileDetailsDTO.getSport());
-        return profileDetailsService.saveProfile(profileDetailsDTO);
+    public ProfileDetailsResponse createProfile(@RequestBody ProfileDetailsRequest profileDetailsRequest){
+
+        return profileDetailsService.saveProfile(profileDetailsRequest);
     }
 
+    @PostMapping("/payment")
+    public PaymentDetailsResponse createPayment(@RequestBody PaymentDetailsRequest paymentDetailsRequest){
+
+        return paymentDetailsService.savePaymentDetails(paymentDetailsRequest);
+    }
+
+    @PostMapping("/settings")
+    public PrivacySettingsResponse createSettings(@RequestBody PrivacySettingsRequest privacySettingsRequest){
+        logger.info("Creating settings");
+        return privacySettingsService.savePrivacySettings(privacySettingsRequest);
+    }
 }

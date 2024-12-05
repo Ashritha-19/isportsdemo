@@ -1,7 +1,6 @@
 package com.neoteric.isports.dto;
 
 import lombok.Data;
-
 import java.util.Date;
 
 @Data
